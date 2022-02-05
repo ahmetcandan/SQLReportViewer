@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SQLReportViewer.Data;
+using SQLReportViewer.Data.Model;
 
 namespace SQLReportViewer.Migrations
 {

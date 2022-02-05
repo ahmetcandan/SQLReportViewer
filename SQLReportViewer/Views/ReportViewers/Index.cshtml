@@ -1,0 +1,29 @@
+﻿@model ReportViewModel
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/AdminLTE/_Layout.cshtml";
+}
+
+<h1>@Model.ReportName</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            @foreach(var c in Model.DataTable.Columns) {
+                <th>
+                    @c
+                </th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (System.Data.DataRow item in Model.DataTable.Rows) {
+            <tr>
+            @foreach(System.Data.DataColumn c in Model.DataTable.Columns) {
+                <td>@item[c.ColumnName]</td>
+            }
+            </tr>
+        }
+    </tbody>
+</table>

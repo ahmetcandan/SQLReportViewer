@@ -282,6 +282,6 @@ namespace SQLReportViewer.Migrations
 
             migrationBuilder.DropTable(
                 name: "DbConnections");
-        }
+        } 
     }
 }

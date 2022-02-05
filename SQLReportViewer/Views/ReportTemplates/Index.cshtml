@@ -17,16 +17,7 @@
                 @Html.DisplayNameFor(model => model.TemplateName)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ReportSQL)
-            </th>
-            <th>
                 @Html.DisplayNameFor(model => model.DbConnection)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsActive)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.IsDelete)
             </th>
             <th></th>
         </tr>
@@ -38,21 +29,12 @@
                 @Html.DisplayFor(modelItem => item.TemplateName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.ReportSQL)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.DbConnection.ConnectionName)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IsActive)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsDelete)
-            </td>
-            <td>
                 <a asp-action="Edit" asp-route-id="@item.ReportTemplateId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ReportTemplateId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ReportTemplateId">Delete</a>
+                <a asp-action="Delete" asp-route-id="@item.ReportTemplateId">Delete</a> |
+                <a asp-action="Index" asp-controller="ReportViewers" asp-route-id="@item.ReportTemplateId">View</a>
             </td>
         </tr>
 }
