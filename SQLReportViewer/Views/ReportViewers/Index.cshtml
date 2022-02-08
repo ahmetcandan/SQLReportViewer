@@ -1,4 +1,5 @@
-﻿@model ReportViewModel
+﻿@using PagedList.Core.Mvc
+@model ReportViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -7,23 +8,92 @@
 
 <h1>@Model.ReportName</h1>
 
-<table class="table">
-    <thead>
-        <tr>
-            @foreach(var c in Model.DataTable.Columns) {
-                <th>
-                    @c
-                </th>
-            }
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (System.Data.DataRow item in Model.DataTable.Rows) {
+<div class="row" id="filterItems">
+    @foreach (var filter in @Model.ReportFilters)
+    {
+        <div class="col-md-3">
+            <div class="form-group">
+                <label>@filter.ColumnName</label>
+                <select id='filter@(filter.ReportFilterId)' value="@filter.Value" column-name='@filter.ColumnName' class="form-control report-filter" filter-type="@filter.FilterTypeId" asp-items="@filter.FilterKeyValues"></select>
+            </div>
+        </div>
+    }
+</div>
+
+<div style="background: #fff; border: solid #dee2e6; border-width: 1px;">
+    <table class="table table-hover table-sm table-bordered">
+        <thead>
             <tr>
-            @foreach(System.Data.DataColumn c in Model.DataTable.Columns) {
-                <td>@item[c.ColumnName]</td>
-            }
+                @foreach (var c in Model.Columns)
+                {
+                    <th>
+                        @c
+                    </th>
+                }
             </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model.DataRows)
+            {
+                <tr>
+                    @foreach (System.Data.DataColumn c in Model.Columns)
+                    {
+                        <td>@item[c.ColumnName]</td>
+                    }
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+        </tfoot>
+    </table>
+    <div class="row">
+        <div class="col-md-11">
+            <pager id="report-pager" class="pager-container" list="@Model.DataRows" style="justify-content:center" options="@PagedListRenderOptions.Bootstrap4Full" asp-route-count="@Model.PageCount" asp-action="Index" asp-controller="ReportViewers" asp-route-query="@Model.SearchQuery" />
+        </div>
+        <div class="col-md-1">
+            <div class="form-group">
+                <label>Page Count</label>
+                <select id='page-count' value="10" class="form-control">
+                    <option value="5">5</option>
+                    <option selected="selected" value="10">10</option>
+                    <option value="20">20</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="form-group" style="float: right; padding: 10px">
+            <input type="button" value="Refresh" class="btn btn-primary" onclick="refreshList()" />
+        </div>
+    </div>
+</div>
+
+<script>
+    window.onload = function(e){ 
+        const queryList = decodeURI('@Model.SearchQuery').split(';');
+        for(let i = 0; i < queryList.length; i++) {
+            const item = queryList[i];
+            if (item.split(':').length === 2) {
+                const itemList = item.split(':');
+                if (itemList[0] !== 'id') {
+                    $("#" + itemList[0] + "")[0].value = itemList[1];
+                }
+            }
         }
-    </tbody>
-</table>
+        $("#page-count")[0].value = '@Model.PageCount';
+    }
+
+    function refreshList() {
+        let query = 'id:' + '@Model.ReportTemplateId;';
+        let filterList = $("#filterItems .report-filter");
+        for (let i = 0; i < filterList.length; i++) {
+            query += filterList[0].getAttribute("id") + ':' + filterList[i].value + ';';
+        }
+        const count = $("#page-count")[0].value;
+        window.location.href = window.location.origin + window.location.pathname + '?count=' + count + '&query=' + query + '&page=1';
+    }
+</script>

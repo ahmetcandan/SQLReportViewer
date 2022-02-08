@@ -34,7 +34,7 @@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ReportTemplateId">Edit</a> |
                 <a asp-action="Delete" asp-route-id="@item.ReportTemplateId">Delete</a> |
-                <a asp-action="Index" asp-controller="ReportViewers" asp-route-id="@item.ReportTemplateId">View</a>
+                <a asp-action="Index" asp-controller="ReportViewers" asp-route-query="id:@item.ReportTemplateId">View</a>
             </td>
         </tr>
 }

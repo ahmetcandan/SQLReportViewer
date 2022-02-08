@@ -21,7 +21,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="ReportSQL" class="control-label"></label>
-                <input asp-for="ReportSQL" class="form-control" />
+                <textarea asp-for="ReportSQL" class="form-control" rows="7"></textarea>
                 <span asp-validation-for="ReportSQL" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -34,10 +34,48 @@
                     <input class="form-check-input" asp-for="IsActive" /> @Html.DisplayNameFor(model => model.IsActive)
                 </label>
             </div>
-            <div class="form-group form-check">
-                <label class="form-check-label">
-                    <input class="form-check-input" asp-for="IsDelete" /> @Html.DisplayNameFor(model => model.IsDelete)
-                </label>
+            <div class="form-group">
+                <table class="table table-hover table-sm">
+                    <thead>
+                        <tr>
+                            <th>
+                                Filter TypeName
+                            </th>
+                            <th>
+                                Column Name
+                            </th>
+                            <th>
+                                Default Value
+                            </th>
+                            <th>
+                                Required
+                            </th>
+                            <th><a asp-action="Create" asp-controller="ReportFilters">New</a></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                @foreach (var item in @Model.ReportFilters) {
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ReportFilterType.FilterTypeName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.ColumnName)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DefaultValue)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Required)
+                            </td>
+                            <td>
+                                <a asp-action="Edit" asp-controller="ReportFilters" asp-route-id="@item.ReportFilterId">Edit</a> |
+                                <a asp-action="Delete" asp-controller="ReportFilters" asp-route-id="@item.ReportFilterId">Delete</a> |
+                            </td>
+                        </tr>
+                }
+                    </tbody>
+                </table>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

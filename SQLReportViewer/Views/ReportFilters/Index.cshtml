@@ -1,0 +1,78 @@
+﻿@model IEnumerable<SQLReportViewer.Data.Model.ReportFilter>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ReportTemplate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ColumnName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ChooseSelectQuery)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DefaultValue)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ReportFilterType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Required)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsActive)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IsDelete)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReportTemplate.ReportSQL)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ColumnName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ChooseSelectQuery)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DefaultValue)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ReportFilterType.ReportFilterTypeId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Required)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsActive)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsDelete)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ReportFilterId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ReportFilterId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ReportFilterId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

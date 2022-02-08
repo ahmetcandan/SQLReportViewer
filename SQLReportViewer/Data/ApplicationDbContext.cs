@@ -16,6 +16,8 @@ namespace SQLReportViewer.Data
         }
 
         public DbSet<ReportTemplate> ReportTemplates { get; set; }
+        public DbSet<ReportFilter> ReportFilters { get; set; }
+        public DbSet<ReportFilterType> ReportFilterTypes { get; set; }
         public DbSet<ReportTemplateAuthorization> ReportTemplateAuthorizations { get; set; }
         public DbSet<DbConnection> DbConnections { get; set; }
 

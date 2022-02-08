@@ -10,22 +10,22 @@ using SQLReportViewer.Data.Model;
 
 namespace SQLReportViewer.Controllers
 {
-    public class DbConnectionsController : Controller
+    public class ReportFilterTypesController : Controller
     {
         private readonly ApplicationDbContext _context;
 
-        public DbConnectionsController(ApplicationDbContext context)
+        public ReportFilterTypesController(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        // GET: DbConnections
+        // GET: ReportFilterTypes
         public async Task<IActionResult> Index()
         {
-            return View(await _context.DbConnections.ToListAsync());
+            return View(await _context.ReportFilterTypes.ToListAsync());
         }
 
-        // GET: DbConnections/Details/5
+        // GET: ReportFilterTypes/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -33,39 +33,39 @@ namespace SQLReportViewer.Controllers
                 return NotFound();
             }
 
-            var dbConnection = await _context.DbConnections
-                .FirstOrDefaultAsync(m => m.DbConnectionId == id);
-            if (dbConnection == null)
+            var reportFilterType = await _context.ReportFilterTypes
+                .FirstOrDefaultAsync(m => m.ReportFilterTypeId == id);
+            if (reportFilterType == null)
             {
                 return NotFound();
             }
 
-            return View(dbConnection);
+            return View(reportFilterType);
         }
 
-        // GET: DbConnections/Create
+        // GET: ReportFilterTypes/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: DbConnections/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: ReportFilterTypes/Create
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DbConnectionId,ConnectionName,ConnectionString")] DbConnection dbConnection)
+        public async Task<IActionResult> Create([Bind("ReportFilterTypeId,FilterTypeName")] ReportFilterType reportFilterType)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(dbConnection);
+                _context.Add(reportFilterType);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            return View(dbConnection);
+            return View(reportFilterType);
         }
 
-        // GET: DbConnections/Edit/5
+        // GET: ReportFilterTypes/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -73,22 +73,22 @@ namespace SQLReportViewer.Controllers
                 return NotFound();
             }
 
-            var dbConnection = await _context.DbConnections.FindAsync(id);
-            if (dbConnection == null)
+            var reportFilterType = await _context.ReportFilterTypes.FindAsync(id);
+            if (reportFilterType == null)
             {
                 return NotFound();
             }
-            return View(dbConnection);
+            return View(reportFilterType);
         }
 
-        // POST: DbConnections/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to, for 
-        // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: ReportFilterTypes/Edit/5
+        // To protect from overposting attacks, enable the specific properties you want to bind to.
+        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("DbConnectionId,ConnectionName,ConnectionString,IsActive")] DbConnection dbConnection)
+        public async Task<IActionResult> Edit(int id, [Bind("ReportFilterTypeId,FilterTypeName")] ReportFilterType reportFilterType)
         {
-            if (id != dbConnection.DbConnectionId)
+            if (id != reportFilterType.ReportFilterTypeId)
             {
                 return NotFound();
             }
@@ -97,12 +97,12 @@ namespace SQLReportViewer.Controllers
             {
                 try
                 {
-                    _context.Update(dbConnection);
+                    _context.Update(reportFilterType);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!DbConnectionExists(dbConnection.DbConnectionId))
+                    if (!ReportFilterTypeExists(reportFilterType.ReportFilterTypeId))
                     {
                         return NotFound();
                     }
@@ -113,10 +113,10 @@ namespace SQLReportViewer.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(dbConnection);
+            return View(reportFilterType);
         }
 
-        // GET: DbConnections/Delete/5
+        // GET: ReportFilterTypes/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -124,30 +124,30 @@ namespace SQLReportViewer.Controllers
                 return NotFound();
             }
 
-            var dbConnection = await _context.DbConnections
-                .FirstOrDefaultAsync(m => m.DbConnectionId == id);
-            if (dbConnection == null)
+            var reportFilterType = await _context.ReportFilterTypes
+                .FirstOrDefaultAsync(m => m.ReportFilterTypeId == id);
+            if (reportFilterType == null)
             {
                 return NotFound();
             }
 
-            return View(dbConnection);
+            return View(reportFilterType);
         }
 
-        // POST: DbConnections/Delete/5
+        // POST: ReportFilterTypes/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var dbConnection = await _context.DbConnections.FindAsync(id);
-            dbConnection.IsDelete = true;
+            var reportFilterType = await _context.ReportFilterTypes.FindAsync(id);
+            _context.ReportFilterTypes.Remove(reportFilterType);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool DbConnectionExists(int id)
+        private bool ReportFilterTypeExists(int id)
         {
-            return _context.DbConnections.Any(e => e.DbConnectionId == id);
+            return _context.ReportFilterTypes.Any(e => e.ReportFilterTypeId == id);
         }
     }
 }

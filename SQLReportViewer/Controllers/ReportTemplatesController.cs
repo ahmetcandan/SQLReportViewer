@@ -57,10 +57,12 @@ namespace SQLReportViewer.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ReportTemplateId,TemplateName,ReportSQL,DbConnectionId,IsActive,IsDelete")] ReportTemplate reportTemplate)
+        public async Task<IActionResult> Create([Bind("ReportTemplateId,TemplateName,ReportSQL,DbConnectionId")] ReportTemplate reportTemplate)
         {
             if (ModelState.IsValid)
             {
+                reportTemplate.IsActive = true;
+                reportTemplate.IsDelete = false;
                 _context.Add(reportTemplate);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
@@ -78,6 +80,7 @@ namespace SQLReportViewer.Controllers
             }
 
             var reportTemplate = await _context.ReportTemplates.FindAsync(id);
+            reportTemplate.ReportFilters = await _context.ReportFilters.Where(c => c.ReportFilterTypeId == id).ToListAsync();
             if (reportTemplate == null)
             {
                 return NotFound();
@@ -91,7 +94,7 @@ namespace SQLReportViewer.Controllers
         // more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ReportTemplateId,TemplateName,ReportSQL,DbConnectionId,IsActive,IsDelete")] ReportTemplate reportTemplate)
+        public async Task<IActionResult> Edit(int id, [Bind("ReportTemplateId,TemplateName,ReportSQL,DbConnectionId,IsActive")] ReportTemplate reportTemplate)
         {
             if (id != reportTemplate.ReportTemplateId)
             {
@@ -147,7 +150,7 @@ namespace SQLReportViewer.Controllers
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var reportTemplate = await _context.ReportTemplates.FindAsync(id);
-            _context.ReportTemplates.Remove(reportTemplate);
+            reportTemplate.IsDelete = true;
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }

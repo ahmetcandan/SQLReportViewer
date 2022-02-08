@@ -26,5 +26,12 @@ namespace SQLReportViewer.Data.Model
 
         [Required]
         public bool IsDelete { get; set; }
+
+        public virtual ICollection<ReportFilter> ReportFilters { get; set; }
+
+        public ReportTemplate()
+        {
+            ReportFilters = new List<ReportFilter>();
+        }
     }
 }
