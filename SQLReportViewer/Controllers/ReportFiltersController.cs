@@ -47,11 +47,11 @@ namespace SQLReportViewer.Controllers
         }
 
         // GET: ReportFilters/Create
-        public IActionResult Create(int reportTemplateId)
+        public IActionResult Create(int id)
         {
             ViewData["ReportFilterTypeId"] = new SelectList(_context.ReportFilterTypes, "ReportFilterTypeId", "FilterTypeName");
             var reportFilter = new ReportFilter();
-            reportFilter.ReportTemplateId = reportTemplateId;
+            reportFilter.ReportTemplateId = id;
             return View(reportFilter);
         }
 

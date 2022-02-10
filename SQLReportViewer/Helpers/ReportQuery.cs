@@ -77,7 +77,7 @@ namespace SQLReportViewer
                 int count = 0;
                 foreach (var filter in _filter)
                 {
-                    result += $" T.[{filter.Key}] = @p{count}";
+                    result += $" {(count > 0 ? ("AND") : (""))} T.[{filter.Key}] = @p{count}";
                     count++;
                 }
                 return result;

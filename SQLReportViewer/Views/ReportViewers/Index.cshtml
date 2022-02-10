@@ -14,7 +14,7 @@
         <div class="col-md-3">
             <div class="form-group">
                 <label>@filter.ColumnName</label>
-                <select id='filter@(filter.ReportFilterId)' value="@filter.Value" column-name='@filter.ColumnName' class="form-control report-filter" filter-type="@filter.FilterTypeId" asp-items="@filter.FilterKeyValues"></select>
+                <select id='filter@(filter.ReportFilterId)' value="" column-name='@filter.ColumnName' class="form-control report-filter" filter-type="@filter.FilterTypeId" asp-items="@filter.FilterKeyValues"></select>
             </div>
         </div>
     }
@@ -91,7 +91,7 @@
         let query = 'id:' + '@Model.ReportTemplateId;';
         let filterList = $("#filterItems .report-filter");
         for (let i = 0; i < filterList.length; i++) {
-            query += filterList[0].getAttribute("id") + ':' + filterList[i].value + ';';
+            query += filterList[i].getAttribute("id") + ':' + filterList[i].value + ';';
         }
         const count = $("#page-count")[0].value;
         window.location.href = window.location.origin + window.location.pathname + '?count=' + count + '&query=' + query + '&page=1';
