@@ -9,45 +9,48 @@
 <h1>@Model.ReportName</h1>
 
 <div class="row" id="filterItems">
-    @*Text*@
-    @foreach (var filter in @Model.ReportFilters.Where(c => c.FilterTypeId == 1))
+    @foreach (var filter in @Model.ReportFilters.OrderBy(c => c.Order))
     {
-        <div class="col-md-3">
-            <div class="form-group">
-                <label>@filter.ColumnName</label>
-                <input type="text" id='filter@(filter.ReportFilterId)' class="form-control report-filter" filter-type="@filter.FilterTypeId" value="@filter.DefaultValue" />
+        @*Text*@
+        if (filter.FilterTypeId == 1)
+        {
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>@filter.ColumnName</label>
+                    <input type="text" id='filter@(filter.ReportFilterId)' class="form-control report-filter" filter-type="@filter.FilterTypeId" value="@filter.DefaultValue" />
+                </div>
             </div>
-        </div>
-    }
-    @*Select*@
-    @foreach (var filter in @Model.ReportFilters.Where(c => c.FilterTypeId == 2))
-    {
-        <div class="col-md-3">
-            <div class="form-group">
-                <label>@filter.ColumnName</label>
-                <select id='filter@(filter.ReportFilterId)' value="" class="form-control report-filter" filter-type="@filter.FilterTypeId" asp-items="@filter.FilterKeyValues"></select>
+        }
+        @*Select*@
+        else if (filter.FilterTypeId == 2)
+        {
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>@filter.ColumnName</label>
+                    <select id='filter@(filter.ReportFilterId)' value="" class="form-control report-filter" filter-type="@filter.FilterTypeId" asp-items="@filter.FilterKeyValues"></select>
+                </div>
             </div>
-        </div>
-    }
-    @*Date*@
-    @foreach (var filter in @Model.ReportFilters.Where(c => c.FilterTypeId == 3))
-    {
-        <div class="col-md-3">
-            <div class="form-group">
-                <label>@filter.ColumnName</label>
-                <input type="date" id='filter@(filter.ReportFilterId)' class="form-control report-filter" filter-type="@filter.FilterTypeId" value="@filter.DefaultValue" />
+        }
+        @*Date*@
+        else if (filter.FilterTypeId == 3)
+        {
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>@filter.ColumnName</label>
+                    <input type="date" id='filter@(filter.ReportFilterId)' class="form-control report-filter" filter-type="@filter.FilterTypeId" value="@filter.DefaultValue" />
+                </div>
             </div>
-        </div>
-    }
-    @*Number*@
-    @foreach (var filter in @Model.ReportFilters.Where(c => c.FilterTypeId == 4))
-    {
-        <div class="col-md-3">
-            <div class="form-group">
-                <label>@filter.ColumnName</label>
-                <input type="number" id='filter@(filter.ReportFilterId)' class="form-control report-filter" filter-type="@filter.FilterTypeId" value="@filter.DefaultValue" />
+        }
+        @*Number*@
+        else if (filter.FilterTypeId == 4)
+        {
+            <div class="col-md-3">
+                <div class="form-group">
+                    <label>@filter.ColumnName</label>
+                    <input type="number" id='filter@(filter.ReportFilterId)' class="form-control report-filter" filter-type="@filter.FilterTypeId" value="@filter.DefaultValue" />
+                </div>
             </div>
-        </div>
+        }
     }
 </div>
 

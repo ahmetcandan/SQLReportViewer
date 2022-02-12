@@ -22,7 +22,7 @@ namespace SQLReportViewer.Controllers
         // GET: ReportTemplates
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.ReportTemplates.Where(r => r.IsActive && !r.IsDelete).Include(r => r.DbConnection);
+            var applicationDbContext = _context.ReportTemplates.Where(r => !r.IsDelete).Include(r => r.DbConnection);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -80,7 +80,7 @@ namespace SQLReportViewer.Controllers
             }
 
             var reportTemplate = _context.ReportTemplates.Find(id);
-            reportTemplate.ReportFilters = _context.ReportFilters.Where(c => c.ReportTemplateId == id && c.IsActive && !c.IsDelete).ToList();
+            reportTemplate.ReportFilters = _context.ReportFilters.Where(c => c.ReportTemplateId == id && !c.IsDelete).ToList();
             if (reportTemplate == null)
             {
                 return NotFound();

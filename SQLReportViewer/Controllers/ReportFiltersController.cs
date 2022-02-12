@@ -22,7 +22,7 @@ namespace SQLReportViewer.Controllers
         // GET: ReportFilters
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.ReportFilters.Where(c => c.IsActive && !c.IsDelete).Include(r => r.ReportFilterType).Include(r => r.ReportTemplate);
+            var applicationDbContext = _context.ReportFilters.Where(c => !c.IsDelete).Include(r => r.ReportFilterType).Include(r => r.ReportTemplate);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -82,7 +82,7 @@ namespace SQLReportViewer.Controllers
                 return NotFound();
             }
 
-            var reportFilter = _context.ReportFilters.FirstOrDefault(c => c.ReportFilterId == id && c.IsActive && !c.IsDelete);
+            var reportFilter = _context.ReportFilters.FirstOrDefault(c => c.ReportFilterId == id && !c.IsDelete);
             if (reportFilter == null)
             {
                 return NotFound();
@@ -96,7 +96,7 @@ namespace SQLReportViewer.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ReportFilterId,ReportTemplateId,ColumnName,ChooseSelectQuery,DefaultValue,ReportFilterTypeId,Required,IsActive")] ReportFilter reportFilter)
+        public async Task<IActionResult> Edit(int id, [Bind("ReportFilterId,ReportTemplateId,ColumnName,ChooseSelectQuery,DefaultValue,ReportFilterTypeId,Required,IsActive,Order")] ReportFilter reportFilter)
         {
             if (id != reportFilter.ReportFilterId)
             {

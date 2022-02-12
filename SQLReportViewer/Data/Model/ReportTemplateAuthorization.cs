@@ -13,8 +13,10 @@ namespace SQLReportViewer.Data.Model
         [Required]
         public int ReportTemplateId { get; set; }
 
-        public int UserId { get; set; }
+        [StringLength(50)]
+        public string UserName { get; set; }
 
-        public int RoleId { get; set; }
+        [StringLength(50)]
+        public string Role { get; set; }
     }
 }

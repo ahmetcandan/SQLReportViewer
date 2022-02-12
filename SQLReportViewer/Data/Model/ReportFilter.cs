@@ -31,6 +31,9 @@ namespace SQLReportViewer.Data.Model
         public bool Required { get; set; }
 
         [Required]
+        public int Order { get; set; }
+
+        [Required]
         public bool IsActive { get; set; }
 
         [Required]

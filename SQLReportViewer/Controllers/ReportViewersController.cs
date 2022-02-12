@@ -74,7 +74,8 @@ namespace SQLReportViewer.Controllers
                     FilterTypeId = filter.Filter.ReportFilterTypeId,
                     FilterTypeName = filter.FilterTypeName,
                     Required = filter.Filter.Required,
-                    FilterKeyValues = filterKeyValues
+                    FilterKeyValues = filterKeyValues,
+                    Order = filter.Filter.Order
                 });
             }
             result.SearchQuery = query;

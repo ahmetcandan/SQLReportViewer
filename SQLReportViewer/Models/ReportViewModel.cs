@@ -46,6 +46,8 @@ namespace SQLReportViewer.Models
 
         public string Value { get; set; }
 
+        public int Order { get; set; }
+
         public List<SelectListItem> FilterKeyValues { get; set; }
     }
 }

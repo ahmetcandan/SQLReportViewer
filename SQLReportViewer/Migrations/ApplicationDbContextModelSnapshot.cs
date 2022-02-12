@@ -275,6 +275,9 @@ namespace SQLReportViewer.Migrations
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
+                    b.Property<int>("Order")
+                        .HasColumnType("int");
+
                     b.Property<int>("ReportFilterTypeId")
                         .HasColumnType("int");
 
@@ -352,11 +355,13 @@ namespace SQLReportViewer.Migrations
                     b.Property<int>("ReportTemplateId")
                         .HasColumnType("int");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int");
+                    b.Property<string>("Role")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("ReportTemplateAuthorizationId");
 
