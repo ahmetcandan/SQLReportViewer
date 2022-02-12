@@ -9,12 +9,43 @@
 <h1>@Model.ReportName</h1>
 
 <div class="row" id="filterItems">
-    @foreach (var filter in @Model.ReportFilters)
+    @*Text*@
+    @foreach (var filter in @Model.ReportFilters.Where(c => c.FilterTypeId == 1))
     {
         <div class="col-md-3">
             <div class="form-group">
                 <label>@filter.ColumnName</label>
-                <select id='filter@(filter.ReportFilterId)' value="" column-name='@filter.ColumnName' class="form-control report-filter" filter-type="@filter.FilterTypeId" asp-items="@filter.FilterKeyValues"></select>
+                <input type="text" id='filter@(filter.ReportFilterId)' class="form-control report-filter" filter-type="@filter.FilterTypeId" value="@filter.DefaultValue" />
+            </div>
+        </div>
+    }
+    @*Select*@
+    @foreach (var filter in @Model.ReportFilters.Where(c => c.FilterTypeId == 2))
+    {
+        <div class="col-md-3">
+            <div class="form-group">
+                <label>@filter.ColumnName</label>
+                <select id='filter@(filter.ReportFilterId)' value="" class="form-control report-filter" filter-type="@filter.FilterTypeId" asp-items="@filter.FilterKeyValues"></select>
+            </div>
+        </div>
+    }
+    @*Date*@
+    @foreach (var filter in @Model.ReportFilters.Where(c => c.FilterTypeId == 3))
+    {
+        <div class="col-md-3">
+            <div class="form-group">
+                <label>@filter.ColumnName</label>
+                <input type="date" id='filter@(filter.ReportFilterId)' class="form-control report-filter" filter-type="@filter.FilterTypeId" value="@filter.DefaultValue" />
+            </div>
+        </div>
+    }
+    @*Number*@
+    @foreach (var filter in @Model.ReportFilters.Where(c => c.FilterTypeId == 4))
+    {
+        <div class="col-md-3">
+            <div class="form-group">
+                <label>@filter.ColumnName</label>
+                <input type="number" id='filter@(filter.ReportFilterId)' class="form-control report-filter" filter-type="@filter.FilterTypeId" value="@filter.DefaultValue" />
             </div>
         </div>
     }

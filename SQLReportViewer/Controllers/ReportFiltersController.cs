@@ -22,7 +22,7 @@ namespace SQLReportViewer.Controllers
         // GET: ReportFilters
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.ReportFilters.Include(r => r.ReportFilterType).Include(r => r.ReportTemplate);
+            var applicationDbContext = _context.ReportFilters.Where(c => c.IsActive && !c.IsDelete).Include(r => r.ReportFilterType).Include(r => r.ReportTemplate);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -65,6 +65,8 @@ namespace SQLReportViewer.Controllers
             if (ModelState.IsValid)
             {
                 _context.Add(reportFilter);
+                reportFilter.IsActive = true;
+                reportFilter.IsDelete = false;
                 await _context.SaveChangesAsync();
                 return RedirectToAction("Edit", "ReportTemplates", new { id = reportFilter.ReportTemplateId });
             }
@@ -80,7 +82,7 @@ namespace SQLReportViewer.Controllers
                 return NotFound();
             }
 
-            var reportFilter = _context.ReportFilters.FirstOrDefault(c => c.ReportFilterId == id);
+            var reportFilter = _context.ReportFilters.FirstOrDefault(c => c.ReportFilterId == id && c.IsActive && !c.IsDelete);
             if (reportFilter == null)
             {
                 return NotFound();
@@ -134,6 +136,7 @@ namespace SQLReportViewer.Controllers
             }
 
             var reportFilter = await _context.ReportFilters
+                .Where(c => c.IsActive && !c.IsDelete)
                 .Include(r => r.ReportFilterType)
                 .Include(r => r.ReportTemplate)
                 .FirstOrDefaultAsync(m => m.ReportFilterId == id);

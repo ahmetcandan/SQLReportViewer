@@ -35,20 +35,22 @@ namespace SQLReportViewer.Controllers
             }
             int templateId = Convert.ToInt32(queryParams["id"]);
             queryParams.Remove("id");
-            var reportTemplate = _context.ReportTemplates.FirstOrDefault(c => c.ReportTemplateId == templateId);
-            var dbConnection = _context.DbConnections.FirstOrDefault(c => c.DbConnectionId == reportTemplate.DbConnectionId);
+            var reportTemplate = _context.ReportTemplates.FirstOrDefault(c => c.ReportTemplateId == templateId && c.IsActive && !c.IsDelete);
+            var dbConnection = _context.DbConnections.FirstOrDefault(c => c.DbConnectionId == reportTemplate.DbConnectionId && c.IsActive && !c.IsDelete);
             var reportFilter = (from f in _context.ReportFilters
-                                    join t in _context.ReportFilterTypes
-                                        on f.ReportFilterTypeId equals t.ReportFilterTypeId
-                                    where f.ReportTemplateId == templateId
-                                    select new { Filter = f, t.FilterTypeName });
+                                join t in _context.ReportFilterTypes
+                                    on f.ReportFilterTypeId equals t.ReportFilterTypeId
+                                where f.ReportTemplateId == templateId
+                                    && f.IsActive && !f.IsDelete
+                                select new { Filter = f, t.FilterTypeName });
 
             Dictionary<string, string> filterParams = new Dictionary<string, string>();
             foreach (var item in queryParams)
             {
                 int reportFilterId = Convert.ToInt32(item.Key.Substring(6));
                 var filter = reportFilter.FirstOrDefault(c => c.Filter.ReportFilterId == reportFilterId);
-                filterParams.Add(filter.Filter.ColumnName, item.Value);
+                if (filter.Filter.Required || !string.IsNullOrEmpty(item.Value))
+                    filterParams.Add(filter.Filter.ColumnName, item.Value);
             }
 
             var reportyQuery = new ReportQuery(dbConnection.ConnectionString, reportTemplate.ReportSQL, page, count, filterParams);
@@ -56,10 +58,14 @@ namespace SQLReportViewer.Controllers
             result.ReportFilters = new List<ReportFilterModel>();
             foreach (var filter in reportFilter)
             {
-                var dt = reportyQuery.ExecuteQuery(filter.Filter.ChooseSelectQuery);
-                List<SelectListItem> filterKeyValues = new List<SelectListItem>();
-                foreach (DataRow dr in dt.Rows)
-                    filterKeyValues.Add(new SelectListItem(dr["text"].ToString(), dr["value"].ToString()));
+                List<SelectListItem> filterKeyValues = null;
+                if (filter.Filter.ChooseSelectQuery != null)
+                {
+                    filterKeyValues = new List<SelectListItem>();
+                    var dt = reportyQuery.ExecuteQuery(filter.Filter.ChooseSelectQuery);
+                    foreach (DataRow dr in dt.Rows)
+                        filterKeyValues.Add(new SelectListItem(dr["text"].ToString(), dr["value"].ToString()));
+                }
                 result.ReportFilters.Add(new ReportFilterModel
                 {
                     ReportFilterId = filter.Filter.ReportFilterId,
@@ -68,8 +74,7 @@ namespace SQLReportViewer.Controllers
                     FilterTypeId = filter.Filter.ReportFilterTypeId,
                     FilterTypeName = filter.FilterTypeName,
                     Required = filter.Filter.Required,
-                    FilterKeyValues = filterKeyValues,
-                    Value = "42"
+                    FilterKeyValues = filterKeyValues
                 });
             }
             result.SearchQuery = query;

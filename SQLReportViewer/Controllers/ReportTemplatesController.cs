@@ -22,7 +22,7 @@ namespace SQLReportViewer.Controllers
         // GET: ReportTemplates
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.ReportTemplates.Include(r => r.DbConnection);
+            var applicationDbContext = _context.ReportTemplates.Where(r => r.IsActive && !r.IsDelete).Include(r => r.DbConnection);
             return View(await applicationDbContext.ToListAsync());
         }
 
@@ -36,7 +36,7 @@ namespace SQLReportViewer.Controllers
 
             var reportTemplate = await _context.ReportTemplates
                 .Include(r => r.DbConnection)
-                .FirstOrDefaultAsync(m => m.ReportTemplateId == id);
+                .FirstOrDefaultAsync(m => m.ReportTemplateId == id && m.IsActive && !m.IsDelete);
             if (reportTemplate == null)
             {
                 return NotFound();
@@ -48,7 +48,7 @@ namespace SQLReportViewer.Controllers
         // GET: ReportTemplates/Create
         public IActionResult Create()
         {
-            ViewData["DbConnectionId"] = new SelectList(_context.DbConnections, "DbConnectionId", "ConnectionName");
+            ViewData["DbConnectionId"] = new SelectList(_context.DbConnections.Where(c => c.IsActive && !c.IsDelete), "DbConnectionId", "ConnectionName");
             return View();
         }
 
@@ -72,20 +72,20 @@ namespace SQLReportViewer.Controllers
         }
 
         // GET: ReportTemplates/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var reportTemplate = await _context.ReportTemplates.FindAsync(id);
-            reportTemplate.ReportFilters = await _context.ReportFilters.Where(c => c.ReportFilterTypeId == id).ToListAsync();
+            var reportTemplate = _context.ReportTemplates.Find(id);
+            reportTemplate.ReportFilters = _context.ReportFilters.Where(c => c.ReportTemplateId == id && c.IsActive && !c.IsDelete).ToList();
             if (reportTemplate == null)
             {
                 return NotFound();
             }
-            ViewData["DbConnectionId"] = new SelectList(_context.DbConnections, "DbConnectionId", "ConnectionName", reportTemplate.DbConnectionId);
+            ViewData["DbConnectionId"] = new SelectList(_context.DbConnections.Where(c => c.IsActive && !c.IsDelete), "DbConnectionId", "ConnectionName", reportTemplate.DbConnectionId);
             return View(reportTemplate);
         }
 
@@ -121,7 +121,7 @@ namespace SQLReportViewer.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["DbConnectionId"] = new SelectList(_context.DbConnections, "DbConnectionId", "ConnectionName", reportTemplate.DbConnectionId);
+            ViewData["DbConnectionId"] = new SelectList(_context.DbConnections.Where(c => c.IsActive && !c.IsDelete), "DbConnectionId", "ConnectionName", reportTemplate.DbConnectionId);
             return View(reportTemplate);
         }
 
@@ -134,6 +134,7 @@ namespace SQLReportViewer.Controllers
             }
 
             var reportTemplate = await _context.ReportTemplates
+                .Where(c => c.IsActive && !c.IsDelete)
                 .Include(r => r.DbConnection)
                 .FirstOrDefaultAsync(m => m.ReportTemplateId == id);
             if (reportTemplate == null)

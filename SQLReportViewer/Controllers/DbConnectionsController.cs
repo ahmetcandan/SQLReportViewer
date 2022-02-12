@@ -22,7 +22,7 @@ namespace SQLReportViewer.Controllers
         // GET: DbConnections
         public async Task<IActionResult> Index()
         {
-            return View(await _context.DbConnections.ToListAsync());
+            return View(await _context.DbConnections.Where(c => c.IsActive && !c.IsDelete).ToListAsync());
         }
 
         // GET: DbConnections/Details/5
@@ -73,7 +73,7 @@ namespace SQLReportViewer.Controllers
                 return NotFound();
             }
 
-            var dbConnection = await _context.DbConnections.FindAsync(id);
+            var dbConnection = await _context.DbConnections.Where(c => c.IsActive && !c.IsDelete).FirstAsync(c => c.DbConnectionId == id);
             if (dbConnection == null)
             {
                 return NotFound();
@@ -125,6 +125,7 @@ namespace SQLReportViewer.Controllers
             }
 
             var dbConnection = await _context.DbConnections
+                .Where(c => c.IsActive && !c.IsDelete)
                 .FirstOrDefaultAsync(m => m.DbConnectionId == id);
             if (dbConnection == null)
             {
